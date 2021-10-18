@@ -4,9 +4,9 @@
         "dataset_path": "/drive/datasets/FER2013/fer2013/data",
         "stage": "train",
         "loader_params": {
-            "batch_size": 1,
+            "batch_size": 2,
             "shuffle": true,
-            "num_workers": 24,
+            "num_workers": 1,
             "pin_memory": true
         },
         "input_size": [200, 200]

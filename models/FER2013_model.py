@@ -133,6 +133,7 @@ class FER2013model(BaseModel):
             momentum=configuration['momentum'],
             weight_decay=configuration['weight_decay']
         )
+        self.optimizers = [self.optimizer]
 
         self.loss_names = ['total']
 
