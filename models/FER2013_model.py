@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from models.base_model import BaseModel
 
 
 def conv3x3(in_channels, out_channels, stride=1, groups=1, dilation=1):
@@ -75,12 +76,10 @@ class BasicBlock(nn.Module):
     def forward(self, x):
         pass
 
-
-class BaseNet(nn.Module):
+class FER2013(nn.Module):
     """basenet for fer2013"""
-
     def __init__(self, in_channels=1, num_classes=7):
-        super(BaseNet, self).__init__()
+        super(FER2013, self).__init__()
         norm_layer = nn.BatchNorm2d
 
         self.conv1 = nn.Conv2d(
@@ -102,7 +101,9 @@ class BaseNet(nn.Module):
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(1024, 7)
 
-    def forward(self, x):
+    def forward(self):
+        x = self.input
+
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
@@ -114,6 +115,31 @@ class BaseNet(nn.Module):
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
         x = self.fc(x)
+        return x
+
+class FER2013model(BaseModel):
+    """basenet for fer2013"""
+
+    def __init__(self, configuration, in_channels=1, num_classes=7):
+        super().__init__(configuration)
+
+        self.model = FER2013(in_channels, num_classes)
+        self.model.cuda()
+
+    def forward(self):
+        x = self.input
+
+        x = self.model.conv1(x)
+        x = self.model.bn1(x)
+        x = self.model.relu(x)
+
+        x = self.model.residual_1(x)
+        x = self.model.residual_2(x)
+        x = self.model.residual_3(x)
+
+        x = self.model.avgpool(x)
+        x = torch.flatten(x, 1)
+        x = self.model.fc(x)
         return x
 
 

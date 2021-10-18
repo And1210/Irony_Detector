@@ -7,11 +7,11 @@ import time
 from utils.visualizer import Visualizer
 
 """Performs training of a specified model.
-    
+
 Input params:
-    config_file: Either a string with the path to the JSON 
+    config_file: Either a string with the path to the JSON
         system-specific config file or a dictionary containing
-        the system-specific, dataset-specific and 
+        the system-specific, dataset-specific and
         model-specific settings.
     export: Whether to export the final model (default=True).
 """
@@ -48,11 +48,17 @@ def train(config_file, export=True):
 
         model.train()
         for i, data in enumerate(train_dataset):  # inner loop within one epoch
+            # print(i)
+            # print(data[0].shape)
+            # print(data[1])
             visualizer.reset()
 
             model.set_input(data)         # unpack data from dataset and apply preprocessing
-            model.forward()
-            model.backward()
+            # print(data)
+            output = model.forward()
+            # print('------------------------------------------------------------------------------')
+            # print(output)
+            # model.backward()
 
             if i % configuration['model_update_freq'] == 0:
                 model.optimize_parameters()   # calculate loss functions, get gradients, update network weights
@@ -95,7 +101,7 @@ if __name__ == '__main__':
     multiprocessing.set_start_method('spawn', True)
 
     parser = argparse.ArgumentParser(description='Perform model training.')
-    parser.add_argument('configfile', help='path to the configfile')
+    parser.add_argument('configfile', default="./config_fer.json", help='path to the configfile')
 
     args = parser.parse_args()
     train(args.configfile)

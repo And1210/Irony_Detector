@@ -1,22 +1,24 @@
 {
     "train_dataset_params": {
         "dataset_name": "FER2013",
-        "dataset_path": "",
+        "dataset_path": "/drive/datasets/FER2013/fer2013/data",
+        "stage": "train",
         "loader_params": {
-            "batch_size": 24,
+            "batch_size": 1,
             "shuffle": true,
-            "num_workers": 4,
+            "num_workers": 1,
             "pin_memory": true
         },
         "input_size": [200, 200]
     },
     "val_dataset_params": {
         "dataset_name": "FER2013",
-        "dataset_path": "",
+        "dataset_path": "/drive/datasets/FER2013/fer2013/data",
+        "stage": "val",
         "loader_params": {
-            "batch_size": 24,
+            "batch_size": 1,
             "shuffle": false,
-            "num_workers": 4,
+            "num_workers": 1,
             "pin_memory": true
         },
         "input_size": [200, 200]
@@ -33,7 +35,7 @@
         "lr_decay_iters": 10
     },
     "visualization_params": {
-        "name": "2d segmentation"
+        "name": "FER2013"
     },
     "printout_freq": 10,
     "model_update_freq": 1

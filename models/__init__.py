@@ -15,6 +15,7 @@ In the function <__init__>, you need to define four lists:
 import importlib
 from models.base_model import BaseModel
 from torch.optim import lr_scheduler
+from torch.nn import DataParallel
 
 
 def find_model_using_name(model_name):
