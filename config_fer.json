@@ -6,7 +6,7 @@
         "loader_params": {
             "batch_size": 1,
             "shuffle": true,
-            "num_workers": 1,
+            "num_workers": 24,
             "pin_memory": true
         },
         "input_size": [200, 200]

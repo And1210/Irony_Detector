@@ -134,6 +134,8 @@ class FER2013model(BaseModel):
             weight_decay=configuration['weight_decay']
         )
 
+        self.loss_names = ['total']
+
     def forward(self):
         x = self.input
 
@@ -152,16 +154,13 @@ class FER2013model(BaseModel):
         return x
 
     def compute_loss(self):
-        self.loss = self.criterion_loss(self.output, self.label)
+        self.loss_total = self.criterion_loss(self.output, self.label)
 
     def optimize_parameters(self):
-        self.loss.backward()
+        self.loss_total.backward()
         self.optimizer.step()
         self.optimizer.zero_grad()
         torch.cuda.empty_cache()
-
-    def get_current_losses(self):
-        return self.loss
 
 def basenet(in_channels=1, num_classes=7):
     return BaseNet(in_channels, num_classes)
