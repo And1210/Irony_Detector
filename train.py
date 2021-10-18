@@ -58,7 +58,7 @@ def train(config_file, export=True):
             output = model.forward()
             # print('------------------------------------------------------------------------------')
             # print(output)
-            # model.backward()
+            model.compute_loss()
 
             if i % configuration['model_update_freq'] == 0:
                 model.optimize_parameters()   # calculate loss functions, get gradients, update network weights

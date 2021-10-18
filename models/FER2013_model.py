@@ -126,6 +126,14 @@ class FER2013model(BaseModel):
         self.model = FER2013(in_channels, num_classes)
         self.model.cuda()
 
+        self.criterion_loss = nn.CrossEntropyLoss().cuda()
+        self.optimizer = torch.optim.SGD(
+            self.model.parameters(),
+            lr=configuration['lr'],
+            momentum=configuration['momentum'],
+            weight_decay=configuration['weight_decay']
+        )
+
     def forward(self):
         x = self.input
 
@@ -140,8 +148,20 @@ class FER2013model(BaseModel):
         x = self.model.avgpool(x)
         x = torch.flatten(x, 1)
         x = self.model.fc(x)
+        self.output = x
         return x
 
+    def compute_loss(self):
+        self.loss = self.criterion_loss(self.output, self.label)
+
+    def optimize_parameters(self):
+        self.loss.backward()
+        self.optimizer.step()
+        self.optimizer.zero_grad()
+        torch.cuda.empty_cache()
+
+    def get_current_losses(self):
+        return self.loss
 
 def basenet(in_channels=1, num_classes=7):
     return BaseNet(in_channels, num_classes)
