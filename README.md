@@ -1,3 +1,1 @@
-# PyTorchProjectFramework
-
-A basic framework for your PyTorch projects.
+Facial Expression Recognition (FER) project by Andrew Farley for ELEC872.
