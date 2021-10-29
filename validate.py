@@ -3,13 +3,14 @@ from datasets import create_dataset
 from utils import parse_configuration
 from models import create_model
 import os
+from utils.visualizer import Visualizer
 
 """Performs validation of a specified model.
-    
+
 Input params:
-    config_file: Either a string with the path to the JSON 
+    config_file: Either a string with the path to the JSON
         system-specific config file or a dictionary containing
-        the system-specific, dataset-specific and 
+        the system-specific, dataset-specific and
         model-specific settings.
 """
 def validate(config_file):
@@ -26,13 +27,16 @@ def validate(config_file):
     model.setup()
     model.eval()
 
+    print('Initializing visualization...')
+    visualizer = Visualizer(configuration['visualization_params_validation'])   # create a visualizer that displays images and plots
+
     model.pre_epoch_callback(configuration['model_params']['load_checkpoint'])
 
     for i, data in enumerate(val_dataset):
         model.set_input(data)  # unpack data from data loader
         model.test()           # run inference
 
-    model.post_epoch_callback(configuration['model_params']['load_checkpoint'])
+    model.post_epoch_callback(configuration['model_params']['load_checkpoint'], visualizer)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Perform model validation.')

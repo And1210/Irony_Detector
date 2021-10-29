@@ -46,19 +46,22 @@ def train(config_file, export=True):
         train_iterations = len(train_dataset)
         train_batch_size = configuration['train_dataset_params']['loader_params']['batch_size']
 
+        total_loss = 0
+
         model.train()
         for i, data in enumerate(train_dataset):  # inner loop within one epoch
             # print(i)
             # print(data[0].shape)
             # print(data[1])
             visualizer.reset()
-
+            
             model.set_input(data)         # unpack data from dataset and apply preprocessing
-            # print(data)
             output = model.forward()
             # print('------------------------------------------------------------------------------')
             # print(output)
             model.compute_loss()
+
+            total_loss += model.loss_total.item()
 
             if i % configuration['model_update_freq'] == 0:
                 model.optimize_parameters()   # calculate loss functions, get gradients, update network weights
@@ -68,6 +71,9 @@ def train(config_file, export=True):
                 visualizer.print_current_losses(epoch, num_epochs, i, math.floor(train_iterations / train_batch_size), losses)
                 visualizer.plot_current_losses(epoch, float(i) / math.floor(train_iterations / train_batch_size), losses)
 
+        # print('Loss {}\nData Len {}'.format(total_loss, len(train_dataset)))
+        batch_size = configuration["train_dataset_params"]["loader_params"]["batch_size"]
+        print('Loss for epoch {}: {}'.format(epoch, total_loss/(float(len(train_dataset))/batch_size)))
         model.eval()
         for i, data in enumerate(val_dataset):
             model.set_input(data)

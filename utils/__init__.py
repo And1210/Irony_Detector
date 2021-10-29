@@ -35,6 +35,8 @@ def get_scheduler(optimizer, configuration, last_epoch=-1):
     """
     if configuration['lr_policy'] == 'step':
         scheduler = lr_scheduler.StepLR(optimizer, step_size=configuration['lr_decay_iters'], gamma=0.3, last_epoch=last_epoch)
+    elif configuration['lr_policy'] == 'plateau':
+        scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, patience=configuration["plateau_patience"], min_lr=1e-6, verbose=True)
     else:
         return NotImplementedError('learning rate policy [{0}] is not implemented'.format(configuration['lr_policy']))
     return scheduler
