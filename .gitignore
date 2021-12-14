@@ -1,0 +1,3 @@
+./word2vec_similarity_depreceated
+*.pth
+datasets/__pycache__/*

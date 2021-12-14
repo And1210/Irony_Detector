@@ -54,12 +54,12 @@ def train(config_file, export=True):
             # print(data[0].shape)
             # print(data[1])
             visualizer.reset()
-            
+
             model.set_input(data)         # unpack data from dataset and apply preprocessing
             output = model.forward()
             # print('------------------------------------------------------------------------------')
             # print(output)
-            model.compute_loss()
+            # model.compute_loss()
 
             total_loss += model.loss_total.item()
 
