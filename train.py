@@ -95,7 +95,7 @@ def train(config_file, export=True):
             best_recall = val_recall
         if (val_f1 > best_f1):
             best_f1 = val_f1
-        print('Best Accuracy, Precision, Recall, and F1: {:.4f} {:.4f} {:.4f} {:.4f}')
+        print('Best Accuracy, Precision, Recall, and F1: {:.4f} {:.4f} {:.4f} {:.4f}'.format(best_accuracy, best_precision, best_recall, best_f1))
 
         print('Saving model at the end of epoch {0}'.format(epoch))
         model.save_networks(epoch)
