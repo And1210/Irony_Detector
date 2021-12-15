@@ -25,7 +25,10 @@ class BERT(nn.Module):
 
     def forward(self, x):
         bert_out = self.model(x[0], token_type_ids=None, attention_mask=x[2], labels=x[1])
-        return bert_out[0], bert_out[1]
+        x = bert_out[1]
+        x = self.fc(x)
+        x = self.softmax(x)
+        return bert_out[0], x
 
 
 class BERTmodel(BaseModel):
