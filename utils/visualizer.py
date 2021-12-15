@@ -95,6 +95,87 @@ class Visualizer():
             self.create_visdom_connections()
 
 
+    def plot_current_pre_metrics(self, epoch, metrics):
+        """Display the current validation metrics on visdom display: dictionary of error labels and values.
+
+        Input params:
+            epoch: Current epoch.
+            losses: Validation metrics stored in the format of (name, float) pairs.
+        """
+        if not hasattr(self, 'pre_plot_data'):
+            self.pre_plot_data = {'X': [], 'Y': [], 'legend': list(metrics.keys())}
+        self.pre_plot_data['X'].append(epoch)
+        self.pre_plot_data['Y'].append([metrics[k] for k in self.pre_plot_data['legend']])
+        x = np.squeeze(np.stack([np.array(self.pre_plot_data['X'])] * len(self.pre_plot_data['legend']), 1), axis=1)
+        y = np.squeeze(np.array(self.pre_plot_data['Y']), axis=1)
+        try:
+            self.vis.line(
+                X=x,
+                Y=y,
+                opts={
+                    'title': self.name + ' over time',
+                    'legend': self.pre_plot_data['legend'],
+                    'xlabel': 'epoch',
+                    'ylabel': 'metric'},
+                win=self.display_id+2)
+        except ConnectionError:
+            self.create_visdom_connections()
+
+
+    def plot_current_recall_metrics(self, epoch, metrics):
+        """Display the current validation metrics on visdom display: dictionary of error labels and values.
+
+        Input params:
+            epoch: Current epoch.
+            losses: Validation metrics stored in the format of (name, float) pairs.
+        """
+        if not hasattr(self, 'recall_plot_data'):
+            self.recall_plot_data = {'X': [], 'Y': [], 'legend': list(metrics.keys())}
+        self.recall_plot_data['X'].append(epoch)
+        self.recall_plot_data['Y'].append([metrics[k] for k in self.recall_plot_data['legend']])
+        x = np.squeeze(np.stack([np.array(self.recall_plot_data['X'])] * len(self.recall_plot_data['legend']), 1), axis=1)
+        y = np.squeeze(np.array(self.recall_plot_data['Y']), axis=1)
+        try:
+            self.vis.line(
+                X=x,
+                Y=y,
+                opts={
+                    'title': self.name + ' over time',
+                    'legend': self.recall_plot_data['legend'],
+                    'xlabel': 'epoch',
+                    'ylabel': 'metric'},
+                win=self.display_id+3)
+        except ConnectionError:
+            self.create_visdom_connections()
+
+
+    def plot_current_f1_metrics(self, epoch, metrics):
+        """Display the current validation metrics on visdom display: dictionary of error labels and values.
+
+        Input params:
+            epoch: Current epoch.
+            losses: Validation metrics stored in the format of (name, float) pairs.
+        """
+        if not hasattr(self, 'f1_plot_data'):
+            self.f1_plot_data = {'X': [], 'Y': [], 'legend': list(metrics.keys())}
+        self.f1_plot_data['X'].append(epoch)
+        self.f1_plot_data['Y'].append([metrics[k] for k in self.f1_plot_data['legend']])
+        x = np.squeeze(np.stack([np.array(self.f1_plot_data['X'])] * len(self.f1_plot_data['legend']), 1), axis=1)
+        y = np.squeeze(np.array(self.f1_plot_data['Y']), axis=1)
+        try:
+            self.vis.line(
+                X=x,
+                Y=y,
+                opts={
+                    'title': self.name + ' over time',
+                    'legend': self.f1_plot_data['legend'],
+                    'xlabel': 'epoch',
+                    'ylabel': 'metric'},
+                win=self.display_id+4)
+        except ConnectionError:
+            self.create_visdom_connections()
+
+
     def plot_roc_curve(self, fpr, tpr, thresholds):
         """Display the ROC curve.
 
