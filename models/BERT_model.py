@@ -88,7 +88,7 @@ class BERTmodel(BaseModel):
         # Calculate and show accuracy
         val_accuracy = accuracy_score(labels, predictions)
         val_precision = precision_score(labels, predictions)
-        val_recall = precision_score(labels, predictions)
+        val_recall = recall_score(labels, predictions)
         val_f1 = f1_score(labels, predictions)
 
         metrics = OrderedDict()
@@ -115,6 +115,8 @@ class BERTmodel(BaseModel):
         self.val_images = []
         self.val_predictions = []
         self.val_labels = []
+
+        return val_accuracy, val_precision, val_recall, val_f1
 
 
 

@@ -38,6 +38,11 @@ def train(config_file, export=True):
     starting_epoch = configuration['model_params']['load_checkpoint'] + 1
     num_epochs = configuration['model_params']['max_epochs']
 
+    best_accuracy = 0
+    best_precision = 0
+    best_recall = 0
+    best_f1 = 0
+
     for epoch in range(starting_epoch, num_epochs):
         epoch_start_time = time.time()  # timer for entire epoch
         train_dataset.dataset.pre_epoch_callback(epoch)
@@ -79,8 +84,18 @@ def train(config_file, export=True):
             model.set_input(data)
             model.test()
 
-        model.post_epoch_callback(epoch, visualizer)
+        val_accuracy, val_precision, val_recall, val_f1 = model.post_epoch_callback(epoch, visualizer)
         train_dataset.dataset.post_epoch_callback(epoch)
+
+        if (val_accuracy > best_accuracy):
+            best_accuracy = val_accuracy
+        if (val_precision > best_precision):
+            best_precision = val_precision
+        if (val_recall > best_recall):
+            best_recall = val_recall
+        if (val_f1 > best_f1):
+            best_f1 = val_f1
+        print('Best Accuracy, Precision, Recall, and F1: {:.4f} {:.4f} {:.4f} {:.4f}')
 
         print('Saving model at the end of epoch {0}'.format(epoch))
         model.save_networks(epoch)
